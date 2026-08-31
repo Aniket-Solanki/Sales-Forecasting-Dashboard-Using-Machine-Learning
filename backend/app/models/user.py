@@ -1,13 +1,14 @@
+import enum
 from datetime import datetime
 from uuid import UUID
 
-from sqlalchemy import String, Enum as SQLEnum
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy import String
+from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base, uuid_pk, created_at
 
 
-class UserRole(str):
+class UserRole(str, enum.Enum):
     ADMIN = "admin"
     VIEWER = "viewer"
 
@@ -21,7 +22,7 @@ class User(Base):
     )
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
     role: Mapped[UserRole] = mapped_column(
-        SQLEnum(UserRole, name="user_role", create_constraint=True),
+        String(50),
         nullable=False,
         default=UserRole.VIEWER,
     )

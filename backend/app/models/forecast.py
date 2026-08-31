@@ -1,4 +1,5 @@
 from datetime import date
+from typing import Optional
 from uuid import UUID
 
 from sqlalchemy import BigInteger, Date, Float, ForeignKey, String, Index, UniqueConstraint
@@ -19,8 +20,8 @@ class Forecast(Base):
     )
     forecast_date: Mapped[date] = mapped_column(Date, nullable=False)
     predicted_units: Mapped[float] = mapped_column(Float, nullable=False)
-    lower_bound: Mapped[float] = mapped_column(Float, nullable=False)
-    upper_bound: Mapped[float] = mapped_column(Float, nullable=False)
+    lower_bound: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    upper_bound: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
     model_version: Mapped[str] = mapped_column(String(50), nullable=False)
 
     # Relationships

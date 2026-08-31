@@ -1,7 +1,7 @@
 from datetime import datetime
 from uuid import UUID
 
-from sqlalchemy import String, ForeignKey, Index
+from sqlalchemy import String
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base, uuid_pk, created_at
@@ -13,6 +13,7 @@ class Product(Base):
     id: Mapped[UUID] = uuid_pk
     sku: Mapped[str] = mapped_column(String(100), unique=True, nullable=False, index=True)
     name: Mapped[str] = mapped_column(String(255), nullable=False)
+    # index=True generates ix_products_category automatically
     category: Mapped[str] = mapped_column(String(100), nullable=False, index=True)
     created_at: Mapped[datetime] = created_at
 
@@ -22,8 +23,4 @@ class Product(Base):
     )
     forecasts: Mapped[list["Forecast"]] = relationship(
         back_populates="product", cascade="all, delete-orphan"
-    )
-
-    __table_args__ = (
-        Index("ix_products_category", "category"),
     )
