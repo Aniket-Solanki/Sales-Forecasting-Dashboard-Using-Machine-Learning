@@ -19,16 +19,18 @@ class Settings(BaseSettings):
 
     @property
     def DATABASE_URL(self) -> str:
+        ssl_mode = "?sslmode=require" if self.POSTGRES_SERVER not in ("localhost", "127.0.0.1") else ""
         return (
             f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
-            f"@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+            f"@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}{ssl_mode}"
         )
 
     @property
     def DATABASE_URL_SYNC(self) -> str:
+        ssl_mode = "?sslmode=require" if self.POSTGRES_SERVER not in ("localhost", "127.0.0.1") else ""
         return (
             f"postgresql+psycopg2://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
-            f"@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+            f"@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}{ssl_mode}"
         )
 
     # Redis
