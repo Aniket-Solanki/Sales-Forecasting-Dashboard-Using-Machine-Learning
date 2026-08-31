@@ -7,23 +7,22 @@ from sqlalchemy.dialects.postgresql import UUID as PG_UUID
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
-class Base(DeclarativeBase):
-    pass
+# ---------------------------------------------------------------------------
+# Reusable Annotated column types (SQLAlchemy 2.0 pattern)
+# These are used as type hints, NOT as default values on Mapped columns.
+# Usage:  id: Mapped[uuid_pk]  (NOT  id: Mapped[UUID] = uuid_pk)
+# ---------------------------------------------------------------------------
 
-
-# Type annotations for common columns
 uuid_pk = Annotated[
     UUID,
     mapped_column(
         PG_UUID(as_uuid=True),
         primary_key=True,
         default=uuid4,
-        unique=True,
-        nullable=False,
     ),
 ]
 
-created_at = Annotated[
+created_at_col = Annotated[
     datetime,
     mapped_column(
         DateTime(timezone=True),
@@ -32,7 +31,7 @@ created_at = Annotated[
     ),
 ]
 
-updated_at = Annotated[
+updated_at_col = Annotated[
     datetime,
     mapped_column(
         DateTime(timezone=True),
@@ -41,3 +40,10 @@ updated_at = Annotated[
         nullable=False,
     ),
 ]
+
+
+class Base(DeclarativeBase):
+    type_annotation_map = {
+        # Register UUID → PG_UUID so mapped_column infers it automatically
+        UUID: PG_UUID(as_uuid=True),
+    }

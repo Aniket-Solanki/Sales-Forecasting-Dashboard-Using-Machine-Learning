@@ -20,6 +20,7 @@ class Forecast(Base):
     )
     forecast_date: Mapped[date] = mapped_column(Date, nullable=False)
     predicted_units: Mapped[float] = mapped_column(Float, nullable=False)
+    # 95% CI bounds — nullable per spec (no "Not Null" listed)
     lower_bound: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
     upper_bound: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
     model_version: Mapped[str] = mapped_column(String(50), nullable=False)
@@ -31,6 +32,6 @@ class Forecast(Base):
     __table_args__ = (
         # Composite index for efficient date-range queries
         Index("ix_forecasts_product_id_forecast_date", "product_id", "forecast_date"),
-        # Unique constraint to prevent duplicate forecasts for same product on same date
+        # One forecast row per product per date per model run
         UniqueConstraint("product_id", "forecast_date", name="uq_forecasts_product_date"),
     )

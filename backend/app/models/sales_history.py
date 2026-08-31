@@ -27,8 +27,8 @@ class SalesHistory(Base):
 
     # Constraints and Indexes
     __table_args__ = (
-        # Composite index on (product_id, date) - CRITICAL for performance
+        # Composite index on (product_id, date) — CRITICAL for performance per spec
         Index("ix_sales_history_product_id_date", "product_id", "date"),
-        # Unique constraint to prevent duplicate entries for same product on same date
+        # Unique constraint: one row per product per day
         UniqueConstraint("product_id", "date", name="uq_sales_history_product_date"),
     )
