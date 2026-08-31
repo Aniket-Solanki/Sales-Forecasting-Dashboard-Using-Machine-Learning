@@ -19,7 +19,7 @@ class Settings(BaseSettings):
 
     @property
     def DATABASE_URL(self) -> str:
-        ssl_mode = "?sslmode=require" if self.POSTGRES_SERVER not in ("localhost", "127.0.0.1") else ""
+        ssl_mode = "?ssl=require" if self.POSTGRES_SERVER not in ("localhost", "127.0.0.1") else ""
         return (
             f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
             f"@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}{ssl_mode}"
