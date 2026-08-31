@@ -37,10 +37,13 @@ class Settings(BaseSettings):
     REDIS_HOST: str = "localhost"
     REDIS_PORT: int = 6379
     REDIS_DB: int = 0
+    REDIS_PASSWORD: str | None = None
 
     @property
     def REDIS_URL(self) -> str:
-        return f"redis://{self.REDIS_HOST}:{self.REDIS_PORT}/{self.REDIS_DB}"
+        scheme = "rediss" if self.REDIS_HOST not in ("localhost", "127.0.0.1") else "redis"
+        auth = f"default:{self.REDIS_PASSWORD}@" if self.REDIS_PASSWORD else ""
+        return f"{scheme}://{auth}{self.REDIS_HOST}:{self.REDIS_PORT}/{self.REDIS_DB}"
 
     # Security
     SECRET_KEY: str = "your-secret-key-change-in-production"
