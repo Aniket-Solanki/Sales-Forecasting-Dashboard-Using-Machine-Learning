@@ -11,7 +11,7 @@ sys.path.append(str(Path(__file__).parent.parent))
 
 from app.core.config import get_settings
 from app.db.base import Base
-from app.models import User, Product, SalesHistory, Forecast
+from app.models import User, Product, SalesHistory, Forecast, MLModel
 
 # this is the Alembic Config object
 config = context.config
