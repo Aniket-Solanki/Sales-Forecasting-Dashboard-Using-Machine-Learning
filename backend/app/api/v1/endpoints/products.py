@@ -4,7 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
-from app.api.deps import check_admin_role, get_current_user, get_db
+from app.api.deps import get_current_user, get_db
 from app.models.product import Product
 from app.schemas.product import ProductCreate, ProductResponse
 
@@ -28,9 +28,9 @@ async def read_products(
 async def create_product(
     product_in: ProductCreate,
     db: AsyncSession = Depends(get_db),
-    admin_user: Any = Depends(check_admin_role),
+    current_user: Any = Depends(get_current_user),
 ) -> Any:
-    """Create a new product (requires Admin privileges)."""
+    """Create a new product."""
     result = await db.execute(select(Product).where(Product.sku == product_in.sku))
     product = result.scalars().first()
     if product:
