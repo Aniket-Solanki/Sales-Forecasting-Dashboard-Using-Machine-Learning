@@ -1,8 +1,7 @@
 import axios from "axios";
 
-// Access the backend FastAPI server
-// If running locally, this could be http://localhost:8000, but in production we can use environment variables.
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/api/v1";
+// If NEXT_PUBLIC_API_URL is not set, default to the production Railway backend
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://sales-forecasting-dashboard-using-machine-learni-production.up.railway.app/api/v1";
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
