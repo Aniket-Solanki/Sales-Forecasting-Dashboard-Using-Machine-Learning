@@ -43,7 +43,10 @@ class Settings(BaseSettings):
     def REDIS_URL(self) -> str:
         scheme = "rediss" if self.REDIS_HOST not in ("localhost", "127.0.0.1") else "redis"
         auth = f"default:{self.REDIS_PASSWORD}@" if self.REDIS_PASSWORD else ""
-        return f"{scheme}://{auth}{self.REDIS_HOST}:{self.REDIS_PORT}/{self.REDIS_DB}"
+        base_url = f"{scheme}://{auth}{self.REDIS_HOST}:{self.REDIS_PORT}/{self.REDIS_DB}"
+        if scheme == "rediss":
+            base_url += "?ssl_cert_reqs=CERT_NONE"
+        return base_url
 
     # Security
     SECRET_KEY: str = "your-secret-key-change-in-production"

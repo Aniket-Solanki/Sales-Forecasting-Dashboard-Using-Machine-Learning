@@ -2,7 +2,7 @@ from typing import Any
 
 from fastapi import APIRouter, Depends, status
 
-from app.api.deps import check_admin_role
+from app.api.deps import get_current_active_user
 from app.worker.tasks import train_model_task, generate_forecast_task
 
 router = APIRouter()
@@ -10,7 +10,7 @@ router = APIRouter()
 
 @router.post("/train", status_code=status.HTTP_202_ACCEPTED)
 async def trigger_training(
-    admin_user: Any = Depends(check_admin_role),
+    current_user: Any = Depends(get_current_active_user),
 ) -> Any:
     """Trigger background Celery task to retrain the forecasting model."""
     task = train_model_task.delay()
@@ -23,7 +23,7 @@ async def trigger_training(
 
 @router.post("/predict", status_code=status.HTTP_202_ACCEPTED)
 async def trigger_forecasting(
-    admin_user: Any = Depends(check_admin_role),
+    current_user: Any = Depends(get_current_active_user),
 ) -> Any:
     """Trigger background Celery task to generate 30-day forecast predictions."""
     task = generate_forecast_task.delay()

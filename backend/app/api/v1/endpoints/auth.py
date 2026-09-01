@@ -2,7 +2,7 @@ from datetime import timedelta
 from typing import Any
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
@@ -63,3 +63,30 @@ async def login(
         ),
         "token_type": "bearer",
     }
+
+
+@router.get("/me", response_model=UserResponse)
+async def read_current_user(
+    db: AsyncSession = Depends(get_db),
+    token: str = Depends(OAuth2PasswordBearer(tokenUrl=f"{settings.API_V1_STR}/auth/login")),
+) -> Any:
+    """Return the currently authenticated user's profile."""
+    from jose import JWTError, jwt as jose_jwt
+
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+    )
+    try:
+        payload = jose_jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        email: str = payload.get("sub")
+        if email is None:
+            raise credentials_exception
+    except JWTError:
+        raise credentials_exception
+
+    result = await db.execute(select(User).where(User.email == email))
+    user = result.scalars().first()
+    if user is None:
+        raise credentials_exception
+    return user
