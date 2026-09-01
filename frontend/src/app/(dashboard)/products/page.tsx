@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
-import { Package, Plus, Search, Loader2, X } from "lucide-react";
+import { Package, Plus, Search, Loader2, X, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { format, parseISO } from "date-fns";
+import anime from "animejs";
 
 interface Product {
   id: string;
@@ -63,6 +64,41 @@ export default function ProductsPage() {
       p.category.toLowerCase().includes(search.toLowerCase())
   );
 
+  const downloadCSV = () => {
+    if (products.length === 0) {
+      toast.error("No data to export");
+      return;
+    }
+    const headers = ["ID", "SKU", "Name", "Category", "Created At"];
+    const csvContent = [
+      headers.join(","),
+      ...products.map(p => `"${p.id}","${p.sku}","${p.name}","${p.category}","${p.created_at}"`)
+    ].join("\n");
+    
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", "products.csv");
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  useEffect(() => {
+    if (!loading && filtered.length > 0) {
+      anime({
+        targets: '.table-row-anim',
+        translateY: [10, 0],
+        opacity: [0, 1],
+        delay: anime.stagger(30),
+        duration: 400,
+        easing: 'easeOutSine'
+      });
+    }
+  }, [loading, filtered.length]);
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -73,15 +109,27 @@ export default function ProductsPage() {
             {products.length} product{products.length !== 1 && "s"} in catalogue
           </p>
         </div>
-        <Button
-          size="sm"
-          variant={showForm ? "ghost" : "default"}
-          onClick={() => setShowForm(!showForm)}
-          className="h-8 text-xs gap-1.5"
-        >
-          {showForm ? <X className="h-3.5 w-3.5" /> : <Plus className="h-3.5 w-3.5" />}
-          {showForm ? "Cancel" : "Add Product"}
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={downloadCSV}
+            className="h-8 text-xs gap-1.5"
+            disabled={products.length === 0}
+          >
+            <Download className="h-3.5 w-3.5" />
+            Export CSV
+          </Button>
+          <Button
+            size="sm"
+            variant={showForm ? "ghost" : "default"}
+            onClick={() => setShowForm(!showForm)}
+            className="h-8 text-xs gap-1.5"
+          >
+            {showForm ? <X className="h-3.5 w-3.5" /> : <Plus className="h-3.5 w-3.5" />}
+            {showForm ? "Cancel" : "Add Product"}
+          </Button>
+        </div>
       </div>
 
       {/* Form */}
@@ -140,7 +188,7 @@ export default function ProductsPage() {
             </thead>
             <tbody>
               {filtered.map((p) => (
-                <tr key={p.id} className="border-b border-border/50 hover:bg-muted/20 transition-colors">
+                <tr key={p.id} className="table-row-anim opacity-0 border-b border-border/50 hover:bg-muted/20 transition-colors">
                   <td className="px-4 py-2.5 font-medium">{p.name}</td>
                   <td className="px-4 py-2.5 font-mono text-xs text-muted-foreground">{p.sku}</td>
                   <td className="px-4 py-2.5">

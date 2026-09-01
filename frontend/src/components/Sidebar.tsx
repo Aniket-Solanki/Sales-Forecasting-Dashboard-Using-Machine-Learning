@@ -10,6 +10,7 @@ import {
   BrainCircuit,
   LogOut,
   TrendingUp,
+  Settings,
 } from "lucide-react";
 
 const nav = [
@@ -17,6 +18,7 @@ const nav = [
   { label: "Products", href: "/products", icon: Package },
   { label: "Sales", href: "/sales", icon: BarChart3 },
   { label: "ML Pipeline", href: "/ml", icon: BrainCircuit },
+  { label: "Settings", href: "/settings", icon: Settings },
 ];
 
 export default function Sidebar() {

@@ -2,12 +2,13 @@
 
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
-import { BarChart3, Plus, Search, Loader2, X } from "lucide-react";
+import { BarChart3, Plus, Search, Loader2, X, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { format, parseISO } from "date-fns";
+import anime from "animejs";
 
 interface Product { id: string; sku: string; name: string; }
 interface Sale { id: number; product_id: string; date: string; units_sold: number; revenue: string; }
@@ -60,6 +61,41 @@ export default function SalesPage() {
     return pn.includes(search.toLowerCase()) || s.date.includes(search);
   });
 
+  const downloadCSV = () => {
+    if (sales.length === 0) {
+      toast.error("No data to export");
+      return;
+    }
+    const headers = ["ID", "Product", "Date", "Units Sold", "Revenue"];
+    const csvContent = [
+      headers.join(","),
+      ...sales.map(s => `"${s.id}","${productName(s.product_id).replace(/"/g, '""')}","${s.date}","${s.units_sold}","${s.revenue}"`)
+    ].join("\n");
+    
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", "sales.csv");
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  useEffect(() => {
+    if (!loading && filtered.length > 0) {
+      anime({
+        targets: '.table-row-anim',
+        translateY: [10, 0],
+        opacity: [0, 1],
+        delay: anime.stagger(30),
+        duration: 400,
+        easing: 'easeOutSine'
+      });
+    }
+  }, [loading, filtered.length]);
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
@@ -69,10 +105,16 @@ export default function SalesPage() {
             {sales.length} records · <span className="font-mono">{totalUnits.toLocaleString()}</span> units · <span className="font-mono text-chart-2">${totalRev.toLocaleString(undefined, { minimumFractionDigits: 2 })}</span>
           </p>
         </div>
-        <Button size="sm" variant={showForm ? "ghost" : "default"} onClick={() => setShowForm(!showForm)} className="h-8 text-xs gap-1.5">
-          {showForm ? <X className="h-3.5 w-3.5" /> : <Plus className="h-3.5 w-3.5" />}
-          {showForm ? "Cancel" : "Add Record"}
-        </Button>
+        <div className="flex gap-2">
+          <Button size="sm" variant="outline" onClick={downloadCSV} disabled={sales.length === 0} className="h-8 text-xs gap-1.5">
+            <Download className="h-3.5 w-3.5" />
+            Export CSV
+          </Button>
+          <Button size="sm" variant={showForm ? "ghost" : "default"} onClick={() => setShowForm(!showForm)} className="h-8 text-xs gap-1.5">
+            {showForm ? <X className="h-3.5 w-3.5" /> : <Plus className="h-3.5 w-3.5" />}
+            {showForm ? "Cancel" : "Add Record"}
+          </Button>
+        </div>
       </div>
 
       {showForm && (
@@ -131,7 +173,7 @@ export default function SalesPage() {
             </thead>
             <tbody>
               {filtered.map((s) => (
-                <tr key={s.id} className="border-b border-border/50 hover:bg-muted/20 transition-colors">
+                <tr key={s.id} className="table-row-anim opacity-0 border-b border-border/50 hover:bg-muted/20 transition-colors">
                   <td className="px-4 py-2.5 font-medium">{productName(s.product_id)}</td>
                   <td className="px-4 py-2.5 text-muted-foreground text-xs">{format(parseISO(s.date), "MMM d, yyyy")}</td>
                   <td className="px-4 py-2.5 text-right font-mono">{s.units_sold.toLocaleString()}</td>
