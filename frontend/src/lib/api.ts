@@ -18,3 +18,18 @@ api.interceptors.request.use((config) => {
   }
   return config;
 });
+
+// Interceptor to handle expired tokens
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("jwt_token");
+        localStorage.removeItem("user_data");
+        window.location.href = "/auth/login";
+      }
+    }
+    return Promise.reject(error);
+  }
+);
