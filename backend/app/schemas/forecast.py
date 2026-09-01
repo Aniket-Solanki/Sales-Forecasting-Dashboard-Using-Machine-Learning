@@ -13,9 +13,10 @@ class ForecastBase(BaseModel):
     upper_bound: float
     model_version: str
 
+    model_config = ConfigDict(protected_namespaces=())
+
 
 class ForecastResponse(ForecastBase):
-    id: UUID
-    created_at: datetime
+    id: int
 
-    model_config = ConfigDict(from_attributes=True)
+    model_config = ConfigDict(from_attributes=True, protected_namespaces=())
