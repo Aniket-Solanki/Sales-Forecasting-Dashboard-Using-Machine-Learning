@@ -2,24 +2,17 @@
 
 ## Supported Versions
 
-| Version | Supported |
-|---------|-----------|
-| 0.2.x   | ✅ Yes    |
-| 0.1.x   | ❌ No     |
+| Version | Supported          |
+| ------- | ------------------ |
+| Latest  | :white_check_mark: |
 
 ## Reporting a Vulnerability
 
-If you discover a security vulnerability, **please do NOT open a public GitHub issue**.
+If you discover a security vulnerability, please report it responsibly:
 
-Instead, email the maintainer directly:
+1. **Do NOT** create a public issue
+2. Email: **ssaniket.2004@gmail.com** with details
+3. Include: description, steps to reproduce, impact assessment
+4. Allow time for assessment and fix before disclosure
 
-📧 **ssaniket.2004@email.com**
-
-Please include:
-- A description of the vulnerability
-- Steps to reproduce it
-- Potential impact
-- Any suggested fix (optional)
-
-You will receive a response within **72 hours**. If the issue is confirmed, a patch
-will be released as soon as possible and credited to you (unless you prefer anonymity).
+We take security seriously and will respond within 48 hours.
