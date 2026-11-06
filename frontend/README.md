@@ -1,36 +1,95 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Sales Forecasting Dashboard — Frontend
 
-## Getting Started
+Next.js 16 (App Router) + React 19 + TypeScript frontend for the Sales Forecasting Dashboard.
 
-First, run the development server:
+## Features
+
+- **Authentication** — JWT-based login/register with role support (admin/viewer)
+- **Dashboard** — Interactive forecasting charts with ECharts (recharts)
+- **Real-time data** — TanStack Query for server state management
+- **Theme support** — Dark/light mode via next-themes
+- **Toast notifications** — Sonner for user feedback
+- **UI components** — Shadcn/UI + Tailwind CSS v4
+
+## Tech Stack
+
+| Category | Technology |
+|----------|------------|
+| Framework | Next.js 16 (App Router) |
+| Language | TypeScript (strict) |
+| Styling | Tailwind CSS v4 |
+| Charts | Recharts |
+| State | Zustand + TanStack Query |
+| Auth | JWT (httpOnly cookies) |
+| Forms | React Hook Form + Zod |
+| Icons | Lucide React |
+| Animations | Framer Motion |
+
+## Quick Start
 
 ```bash
+cd frontend
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+frontend/
+├── src/
+│   ├── app/
+│   │   ├── auth/           # Login & Register pages
+│   │   ├── (dashboard)/    # Protected dashboard routes
+│   │   ├── globals.css     # Global styles + Tailwind
+│   │   └── layout.tsx      # Root layout with providers
+│   ├── components/
+│   │   ├── ui/             # Shadcn/UI components
+│   │   └── charts/         # Chart components (ECharts)
+│   ├── context/
+│   │   └── AuthContext.tsx # JWT auth state management
+│   └── lib/
+│       ├── api.ts          # Axios instance with interceptors
+│       └── utils.ts        # Helper functions
+├── package.json
+├── tsconfig.json
+└── next.config.ts
+```
 
-## Learn More
+## Environment Variables
 
-To learn more about Next.js, take a look at the following resources:
+Create `.env.local` in `frontend/`:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+NEXT_PUBLIC_API_URL=http://localhost:8000
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Scripts
 
-## Deploy on Vercel
+```bash
+npm run dev       # Development server
+npm run build     # Production build
+npm run start     # Production server
+npm run lint      # ESLint check
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Authentication Flow
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. User submits credentials → `/auth/login`
+2. Backend returns JWT access token
+3. Frontend stores token in httpOnly cookie (via api interceptor)
+4. `AuthContext` fetches `/auth/me` for user profile
+5. Protected routes check auth state
+
+## Dashboard Pages (Planned)
+
+- `/` — Overview with KPIs & forecast chart
+- `/forecasts` — Detailed forecast views
+- `/products` — Product management
+- `/settings` — User & admin settings
+
+---
+
+Part of [Sales Forecasting Dashboard](https://github.com/Aniket-Solanki/Sales-Forecasting-Dashboard-Using-Machine-Learning) — Minor Project DI05000351

@@ -7,7 +7,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python](https://img.shields.io/badge/Python-3.11-blue?logo=python)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.111-009688?logo=fastapi)](https://fastapi.tiangolo.com/)
-[![Next.js](https://img.shields.io/badge/Next.js-14-black?logo=next.js)](https://nextjs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16-316192?logo=postgresql)](https://www.postgresql.org/)
 [![version](https://img.shields.io/badge/version-0.2.0-brightgreen)](CHANGELOG.md)
 
@@ -39,10 +39,10 @@ interactive forecast charts on a Next.js dashboard with confidence intervals.
 
 | Layer | Technology | Version |
 |---|---|---|
-| **Frontend** | Next.js (App Router) + TypeScript | 14 |
+| **Frontend** | Next.js (App Router) + TypeScript | 16 |
 | **Styling** | Tailwind CSS + Shadcn/UI | — |
 | **State** | Zustand + TanStack Query | — |
-| **Visualisation** | Apache ECharts (`echarts-for-react`) | — |
+| **Visualisation** | Recharts | 3.x |
 | **Backend** | FastAPI + Uvicorn | 0.111 |
 | **ORM** | SQLAlchemy 2.0 | 2.0.30 |
 | **Migrations** | Alembic | 1.13 |
@@ -95,13 +95,15 @@ uvicorn app.main:app --reload
 
 > API docs: **http://localhost:8000/docs**
 
-### 3 — Frontend *(Step 6 — coming soon)*
+### 3 — Frontend
 
 ```bash
 cd frontend
 npm install
 npm run dev                     # http://localhost:3000
 ```
+
+> Frontend includes: JWT auth (login/register), protected routes, dashboard layout with Recharts, TanStack Query for data fetching.
 
 ---
 
@@ -138,10 +140,10 @@ npm run dev                     # http://localhost:3000
 ## 📡 API Contract
 
 | Method | Endpoint | Auth | Description |
-|--------|----------|------|-------------|
+|---|---|---|---|
 | `POST` | `/api/v1/auth/login` | ❌ | Returns JWT token |
-| `GET`  | `/api/v1/dashboard/summary` | ✅ | Revenue KPIs & MoM growth |
-| `GET`  | `/api/v1/dashboard/timeseries` | ✅ | Actuals + forecast for chart |
+| `GET` | `/api/v1/dashboard/summary` | ✅ | Revenue KPIs & MoM growth |
+| `GET` | `/api/v1/dashboard/timeseries` | ✅ | Actuals + forecast for chart |
 | `POST` | `/api/v1/ml/train` | 🔑 Admin | Trigger Celery retrain job |
 | `POST` | `/api/v1/ml/predict` | 🔑 Admin | Trigger 30-day batch inference |
 
@@ -152,41 +154,33 @@ Interactive docs at `/docs` (Swagger UI) and `/redoc` (ReDoc).
 ## 🗺️ Build Roadmap
 
 | Step | Status | Description |
-|------|--------|-------------|
+|---|---|---|
 | 1 | ✅ **Done** | DevOps — Docker Compose (PG 16 + Redis), `.gitignore`, `README` |
 | 2 | ✅ **Done** | Database models (SQLAlchemy 2.0), Alembic initial migration |
-| 3 | 🔜 Next | JWT auth + CRUD APIs for sales data upload & retrieval |
-| 4 | ⏳ | Jupyter notebook — feature engineering + XGBoost prototype |
-| 5 | ⏳ | Celery ML pipeline — automated train & inference tasks |
-| 6 | ⏳ | Next.js frontend — login, route guards, JWT cookie |
-| 7 | ⏳ | Dashboard — ECharts time-series with actuals + forecast bands |
+| 3 | ✅ **Done** | JWT auth + CRUD APIs for sales data upload & retrieval |
+| 4 | ✅ **Done** | Jupyter notebook — feature engineering + XGBoost prototype |
+| 5 | ✅ **Done** | Celery ML pipeline — automated train & inference tasks |
+| 6 | 🔜 **In Progress** | Next.js frontend — login, route guards, JWT cookie |
+| 7 | ⏳ | Dashboard — Recharts time-series with actuals + forecast bands |
 | 8 | ⏳ | Dockerfiles + AWS RDS/ECS or Google Cloud Run deployment |
+
+> **Note**: Steps 1-5 are complete. Step 6 (frontend scaffolding) is done with auth context, login/register pages, API client, and basic dashboard layout. Step 7 (forecast visualization) is the current focus.
 
 ---
 
 ## 👤 Author & Contributor
 
-<table>
-  <tr>
-    <td align="center">
-      <a href="https://github.com/Aniket-Solanki">
-        <img src="https://github.com/Aniket-Solanki.png" width="100px;" alt="Aniket Solanki"/><br />
-        <sub><b>Aniket Solanki</b></sub>
-      </a><br />
-      <sub>💻 Author · 🎨 Design · 🧠 ML</sub>
-    </td>
-  </tr>
-</table>
+| [ ![Aniket Solanki](https://github.com/Aniket-Solanki.png) **Aniket Solanki** ](https://github.com/Aniket-Solanki) 💻 Author · 🎨 Design · 🧠 ML |
+|---|
 
-- 📧 ssaniket.2004@email.com
+- 📧 [ssaniket.2004@email.com](mailto:ssaniket.2004@email.com)
 - 🐙 [@Aniket-Solanki](https://github.com/Aniket-Solanki)
 
 ---
 
 ## 🤝 Contributing
 
-Contributions, bug reports, and feature suggestions are welcome!
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) and our [Code of Conduct](CODE_OF_CONDUCT.md) before opening any issue or pull request.
+Contributions, bug reports, and feature suggestions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) and our [Code of Conduct](CODE_OF_CONDUCT.md) before opening any issue or pull request.
 
 ---
 
@@ -198,6 +192,4 @@ Copyright © 2024 **Aniket Solanki**
 
 ---
 
-<div align="center">
-<sub>Built with ❤️ as Minor Project DI05000351 · Semester 5</sub>
-</div>
+Built with ❤️ as Minor Project DI05000351 · Semester 5
