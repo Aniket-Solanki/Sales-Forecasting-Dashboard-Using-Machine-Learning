@@ -26,7 +26,7 @@ python-multipart==0.0.9
 # ML & Data
 pandas==2.2.2
 polars==1.14.0
-numpy==1.26.4
+numpy==2.5.4
 scikit-learn==1.4.2
 xgboost==2.1.1
 mlflow==2.13.1
