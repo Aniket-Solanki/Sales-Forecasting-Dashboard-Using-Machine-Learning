@@ -1,110 +1,53 @@
-# Contributing to Sales Forecasting Dashboard
+# Contributing
 
-Thank you for your interest in contributing! This project is primarily developed
-as a Minor Project (DI05000351) by **Aniket Solanki**, but feedback, bug reports,
-and suggestions are always welcome.
+Thank you for your interest in contributing! This project welcomes contributions from the community.
 
----
+## How to Contribute
 
-## 📋 Table of Contents
+### Reporting Bugs
+- Check existing issues first
+- Create a new issue with clear title and description
+- Include steps to reproduce, expected vs actual behavior
+- Add environment details (OS, browser, Node version, etc.)
 
-- [Code of Conduct](#code-of-conduct)
-- [How to Report a Bug](#how-to-report-a-bug)
-- [How to Suggest a Feature](#how-to-suggest-a-feature)
-- [Development Setup](#development-setup)
-- [Branching Strategy](#branching-strategy)
-- [Commit Message Convention](#commit-message-convention)
-- [Pull Request Process](#pull-request-process)
+### Suggesting Features
+- Open an issue with "Feature Request" label
+- Describe the use case and proposed solution
+- Discuss implementation approach
 
----
-
-## Code of Conduct
-
-This project follows a standard [Code of Conduct](CODE_OF_CONDUCT.md).
-By participating, you agree to uphold a respectful and inclusive environment.
-
----
-
-## How to Report a Bug
-
-1. Search [existing issues](https://github.com/Aniket-Solanki/Sales-Forecasting-Dashboard-Using-Machine-Learning/issues) first.
-2. Open a new issue using the **Bug Report** template.
-3. Include: steps to reproduce, expected vs. actual behaviour, OS & Python version.
-
----
-
-## How to Suggest a Feature
-
-Open an issue using the **Feature Request** template and describe:
-- The problem you're trying to solve
-- Your proposed solution
-- Alternatives you've considered
-
----
+### Pull Requests
+1. Fork the repository
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Make your changes with clear, focused commits
+4. Follow the project's coding standards
+5. Test your changes
+6. Submit a PR with a clear description
 
 ## Development Setup
 
 ```bash
-# 1. Clone the repository
-git clone https://github.com/Aniket-Solanki/Sales-Forecasting-Dashboard-Using-Machine-Learning.git
+# Clone your fork
+git clone https://github.com/your-username/Sales-Forecasting-Dashboard-Using-Machine-Learning.git
 cd Sales-Forecasting-Dashboard-Using-Machine-Learning
 
-# 2. Start infrastructure
-docker compose up -d
+# Install dependencies
+npm install  # or pip install -r requirements.txt
 
-# 3. Backend setup
-cd backend
-python -m venv .venv
-.venv\Scripts\activate        # Windows
-source .venv/bin/activate     # macOS / Linux
-pip install -r requirements.txt
-
-# 4. Apply migrations
-alembic upgrade head
-
-# 5. Run the API
-uvicorn app.main:app --reload
+# Run development server
+npm run dev  # or appropriate command
 ```
 
----
+## Coding Standards
 
-## Branching Strategy
+- Follow existing code style in the project
+- Use meaningful commit messages (Conventional Commits preferred)
+- Write tests for new features
+- Update documentation as needed
 
-| Branch | Purpose |
-|--------|---------|
-| `master` | Stable, production-ready code |
-| `feature/<name>` | New features (`feature/jwt-auth`) |
-| `fix/<name>` | Bug fixes (`fix/sales-index`) |
-| `chore/<name>` | Maintenance (`chore/update-deps`) |
+## Code of Conduct
 
----
+Be respectful and inclusive. Harassment, discrimination, and hostile behavior are not tolerated.
 
-## Commit Message Convention
+## Questions?
 
-This project uses [Conventional Commits](https://www.conventionalcommits.org/):
-
-```
-<type>(scope): <short description>
-
-[optional body]
-[optional footer]
-```
-
-**Types:** `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`, `perf`
-
-**Examples:**
-```
-feat(auth): implement JWT login endpoint
-fix(models): correct nullable constraint on forecast bounds
-docs(readme): update quick-start guide
-```
-
----
-
-## Pull Request Process
-
-1. Fork the repository and create a feature branch.
-2. Ensure all tests pass: `pytest backend/`
-3. Update `CHANGELOG.md` under `[Unreleased]`.
-4. Open a PR against `master` with a clear description.
-5. PRs require review by [@Aniket-Solanki](https://github.com/Aniket-Solanki).
+Open an issue for any questions about contributing!
